@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using Microsoft.VisualBasic.CompilerServices;
+
 namespace itSTEP_18nth
 {
     class Program
@@ -37,17 +40,55 @@ namespace itSTEP_18nth
 
             }
         }
+        public static void task131()
+        {
+            Assembly SampleAssembly = Assembly.LoadFrom("/Users/sensei.rin/Projects/itSTEP_11nth/Student/bin/Debug/netstandard2.1/Student.dll");
+            Type[] tps = SampleAssembly.GetTypes();
+            object obj = Activator.CreateInstance(SampleAssembly.GetTypes()[0]);
+            obj.GetType().GetProperty("Name").SetValue(obj, "Test");
+            obj.GetType().GetMethod("Print").Invoke(obj, new object[] { });
+        }
+        public static void task132()
+        {
+            Assembly SampleAssembly = Assembly.LoadFrom("/Users/sensei.rin/Projects/itSTEP_11nth/Student/bin/Debug/netstandard2.1/Student.dll");
+            Type[] tps = SampleAssembly.GetTypes();
+            object obj = Activator.CreateInstance(SampleAssembly.GetTypes()[0]);
+            foreach (var item in obj.GetType().GetInterfaces())
+            {
+                Console.WriteLine(item);
+            }
+        }
+        public static void task134(string path)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            FileInfo[] files = di.GetFiles("*.dll");
+            List<Object> objs = new List<object>();
+            foreach (var item in files)
+            {
+                Assembly SampleAssembly = Assembly.LoadFrom(item.FullName);
+                Type[] tps = SampleAssembly.GetTypes();
+                foreach (var it in SampleAssembly.GetTypes())
+                {
+                    object obj = Activator.CreateInstance(it);
+                    if (obj.GetType().GetInterfaces().Length > 0)
+                    {
+                        objs.Add(obj);
+                        Console.WriteLine(obj.GetType().Name);
+                        obj.GetType().GetMethods()[0].Invoke(obj, new object[] { });
+                    }
+                }
+                
+            }
+        }
         static void Main(string[] args)
         {
-            //Assembly SampleAssembly;
-            //SampleAssembly = Assembly.LoadFrom("Assembly.dll");
+            //task132();
+
+
             //task1();
             //task2();
             //task3("privet",4);
             //task4();
-            //13.1 в маке так нельзя сделать, из-за чего я не могу сделать и остальные задание относящиеся к этому
-            //13.2 
-            //13.4
         }
     }
 }
